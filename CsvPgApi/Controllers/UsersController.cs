@@ -1,5 +1,6 @@
 ﻿using CsvPgApi.Model;
 using CsvPgApi.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CsvPgApi.Controllers

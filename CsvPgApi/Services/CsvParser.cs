@@ -26,6 +26,7 @@ namespace CsvPgApi.Services
             foreach (var row in rows)
             {
                 var parsed = ParseLine(row);
+                if (parsed.Count < fieldIndexes.Count) continue;
                 yield return new User
                 {
                     FirstName = parsed[fieldIndexes["first_name"]],
