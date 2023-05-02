@@ -1,4 +1,5 @@
 ﻿using CsvApi.Model;
+using System.Reflection.Metadata.Ecma335;
 
 namespace CsvPgApi.Services
 {
@@ -18,7 +19,34 @@ namespace CsvPgApi.Services
 
         private static List<string> ParseLine(string line)
         {
-            return line.Split(',').ToList();
+            var result = new List<string>();
+            var strings = line.Split(',').ToList();
+
+            // Join back together values that have wrongly split on the comma like "17, Some Street"
+            foreach (var s in strings)
+            {
+
+                if (s.StartsWith('"') & !s.EndsWith('"'))
+                {
+                    result.Add(RemoveQuotesAndTrim(s) + " " + RemoveQuotesAndTrim(strings[strings.IndexOf(s) + 1]));
+                }
+                else if (!s.StartsWith('"') & s.EndsWith('"'))
+                {
+                    continue;
+                }
+                else
+                {
+                    result.Add(RemoveQuotesAndTrim(s));
+                }
+
+            }
+
+            return result;
+        }
+
+        private static string RemoveQuotesAndTrim(string input)
+        {
+            return input.Replace("\"", "").Trim();
         }
 
         private static IEnumerable<User> ParseRows(Dictionary<string, int> fieldIndexes, string[] rows)
